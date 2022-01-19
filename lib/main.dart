@@ -1,71 +1,104 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'dart:math';
-void main() {
+void main(){
   runApp(MyApp());
 }
-
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Staggered Grid View',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(),
-      debugShowCheckedModeBanner: false,
+      home: Home(),
     );
   }
 }
+class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
 
-class MyHomePage extends StatefulWidget {
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  final List<Map<String, dynamic>> _items = List.generate(
-    200,
-      (index)=>{
-      'id': index,
-        'title' : "Item $index",
-        'height' : Random().nextInt(150)+50.5,
-      }
-  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text('Staggered Grid View', style: TextStyle(fontFamily: 'Pacifico', color: Colors.white),),
-        centerTitle: true,
-      ),
-      body: MasonryGridView.count(
-        padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-          crossAxisCount: 5,
-        mainAxisSpacing: 4,
-        crossAxisSpacing: 4,
-        itemCount: _items.length,
-        itemBuilder: (context, index){
-          return Card(
-            color: Color.fromARGB(
-              Random().nextInt(256),
-              Random().nextInt(256),
-              Random().nextInt(256),
-              Random().nextInt(256),
+      backgroundColor: Colors.lightGreen.shade700,
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              radius: 60,
+              backgroundImage: AssetImage('images/munem.jpg'),
             ),
-            key: ValueKey(_items[index]['id']),
-            child: SizedBox(
-              height: _items[index]['height'],
-              child: Center(
-                child: Text(_items[index]['title']),
+            Text(
+              'Munem Sarker', style: TextStyle(
+              fontSize: 40.0,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Pacifico',
+            ),
+            ),
+            Text(
+              'Mobile Apps Developer', style: TextStyle(
+              fontSize: 30.0,
+              color: Colors.green.shade50,
+              letterSpacing: 2.5,
+              fontFamily: 'Bebas',
+            ),
+            ),
+            SizedBox(
+              height: 30,
+              width: 400,
+              child: Divider(color: Colors.green.shade900),
+            ),
+            Card(
+              color: Colors.white,
+              margin: EdgeInsets.all(22),
+              //margin: EdgeInsets.symmetric(vertical: 20,horizontal: 30,),
+              //margin: EdgeInsets.only(right: ,top: ,bottom: ,),
+              child: ListTile(
+                onTap: (){},
+                title: Text('+8801737-673798', style: TextStyle(
+                  color: Colors.green.shade900,
+                  fontFamily: 'Source Sans',
+                  fontSize: 20.0,
+                ),
+                ),
+                leading: Icon(Icons.phone, color: Colors.green,),
               ),
             ),
-          );
-        }
+            Card(
+              margin: EdgeInsets.all(22),
+              child: ListTile(
+                onTap: (){},
+                title: Text('munem@engineer.com', style: TextStyle(
+                  color: Colors.green.shade900,
+                  fontFamily: 'Source Sans',
+                  fontSize: 20.0,
+                ),
+                ),
+                leading: Icon(Icons.email, color: Colors.green,),
+              ),
+            ),
+            Card(
+              margin: EdgeInsets.all(22),
+              child: ListTile(
+                onTap: (){},
+                title: Text('3/1 - Block A, Nilphamari, Rangpur, Bangladesh', style: TextStyle(
+                  color: Colors.green.shade900,
+                  fontFamily: 'Source Sans',
+                  fontSize: 20.0,
+                ),
+                ),
+                leading: Icon(Icons.home, color: Colors.green,),
+              ),
+            ),
+            Center(
+              child: Image(
+                image: AssetImage('images/qr.png'),
+                height: 120,
+                width: 120,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
