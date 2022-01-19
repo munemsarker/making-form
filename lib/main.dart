@@ -1,104 +1,193 @@
 import 'package:flutter/material.dart';
-void main(){
-  runApp(MyApp());
+
+void main() {
+  runApp(const MyApp());
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Home(),
+      title: 'Creating form',
+      theme: ThemeData(
+        primarySwatch: Colors.lightGreen,
+      ),
+      home: const MyHomePage(),
     );
   }
 }
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.lightGreen.shade700,
-      body: SafeArea(
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _activeStepIndex = 0;
+
+  TextEditingController name = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController pass = TextEditingController();
+  TextEditingController address = TextEditingController();
+  TextEditingController pincode = TextEditingController();
+
+  List<Step> stepList() => [
+    Step(
+      state: _activeStepIndex <= 0 ? StepState.editing : StepState.complete,
+      isActive: _activeStepIndex >= 0,
+      title: const Text('Account Details', style: TextStyle(fontFamily: 'Bebas', letterSpacing: 2),),
+      content: Container(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
-              radius: 60,
-              backgroundImage: AssetImage('images/munem.jpg'),
-            ),
-            Text(
-              'Munem Sarker', style: TextStyle(
-              fontSize: 40.0,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Pacifico',
-            ),
-            ),
-            Text(
-              'Mobile Apps Developer', style: TextStyle(
-              fontSize: 30.0,
-              color: Colors.green.shade50,
-              letterSpacing: 2.5,
-              fontFamily: 'Bebas',
-            ),
-            ),
-            SizedBox(
-              height: 30,
-              width: 400,
-              child: Divider(color: Colors.green.shade900),
-            ),
-            Card(
-              color: Colors.white,
-              margin: EdgeInsets.all(22),
-              //margin: EdgeInsets.symmetric(vertical: 20,horizontal: 30,),
-              //margin: EdgeInsets.only(right: ,top: ,bottom: ,),
-              child: ListTile(
-                onTap: (){},
-                title: Text('+8801737-673798', style: TextStyle(
-                  color: Colors.green.shade900,
-                  fontFamily: 'Source Sans',
-                  fontSize: 20.0,
-                ),
-                ),
-                leading: Icon(Icons.phone, color: Colors.green,),
+            TextField(
+              controller: name,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Full Name',
               ),
             ),
-            Card(
-              margin: EdgeInsets.all(22),
-              child: ListTile(
-                onTap: (){},
-                title: Text('munem@engineer.com', style: TextStyle(
-                  color: Colors.green.shade900,
-                  fontFamily: 'Source Sans',
-                  fontSize: 20.0,
-                ),
-                ),
-                leading: Icon(Icons.email, color: Colors.green,),
+            const SizedBox(
+              height: 8,
+            ),
+            TextField(
+              controller: email,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Email',
               ),
             ),
-            Card(
-              margin: EdgeInsets.all(22),
-              child: ListTile(
-                onTap: (){},
-                title: Text('3/1 - Block A, Nilphamari, Rangpur, Bangladesh', style: TextStyle(
-                  color: Colors.green.shade900,
-                  fontFamily: 'Source Sans',
-                  fontSize: 20.0,
-                ),
-                ),
-                leading: Icon(Icons.home, color: Colors.green,),
-              ),
+            const SizedBox(
+              height: 8,
             ),
-            Center(
-              child: Image(
-                image: AssetImage('images/qr.png'),
-                height: 120,
-                width: 120,
+            TextField(
+              controller: pass,
+              obscureText: true,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Create a Password',
               ),
             ),
           ],
         ),
+      ),
+    ),
+    Step(
+        state:
+        _activeStepIndex <= 1 ? StepState.editing : StepState.complete,
+        isActive: _activeStepIndex >= 1,
+        title: const Text('Address', style: TextStyle(fontFamily: 'Bebas', letterSpacing: 2,),),
+        content: Container(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 8,
+              ),
+              TextField(
+                controller: address,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Present Address',
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              TextField(
+                controller: pincode,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Permanent Address',
+                ),
+              ),
+            ],
+          ),
+        )),
+    Step(
+        state: StepState.complete,
+        isActive: _activeStepIndex >= 2,
+        title: const Text('Confirm Details', style: TextStyle(fontFamily: 'Bebas', letterSpacing: 2,),),
+        content: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text('Name: ${name.text}'),
+                Text('Email: ${email.text}'),
+                const Text('Password: *****'),
+                Text('Address : ${address.text}'),
+                Text('PinCode : ${pincode.text}'),
+              ],
+            )))
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Creating a From', style: TextStyle(fontFamily: 'Bebas', letterSpacing: 1,),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.lightGreen,
+      ),
+      body: Stepper(
+        type: StepperType.vertical,
+        currentStep: _activeStepIndex,
+        steps: stepList(),
+        onStepContinue: () {
+          if (_activeStepIndex < (stepList().length - 1)) {
+            setState(() {
+              _activeStepIndex += 1;
+            });
+          } else {
+            print('Submited');
+          }
+        },
+        onStepCancel: () {
+          if (_activeStepIndex == 0) {
+            return;
+          }
+
+          setState(() {
+            _activeStepIndex -= 1;
+          });
+        },
+        onStepTapped: (int index) {
+          setState(() {
+            _activeStepIndex = index;
+          });
+        },
+        controlsBuilder: (context, {onStepContinue, onStepCancel}) {
+          final isLastStep = _activeStepIndex == stepList().length - 1;
+          return Container(
+            child: Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: onStepContinue,
+                    child: (isLastStep)
+                        ? const Text('Submit')
+                        : const Text('Next'),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                if (_activeStepIndex > 0)
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: onStepCancel,
+                      child: const Text('Back'),
+                    ),
+                  )
+              ],
+            ),
+          );
+        },
       ),
     );
   }
